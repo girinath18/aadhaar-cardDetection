@@ -4,13 +4,13 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 
 # Load your trained model
-model_path = r'C:\Users\Dell 5470\OneDrive\Desktop\Aadhaar Detection Using Streamlit\model\Ashes.h5'
+model_path = "model/Ashes.h5"
 model = load_model(model_path)
 
-def predict_aadhaar(image_path):
+def predict_aadhaar(image_file):
     try:
         # Load and preprocess the image
-        img = image.load_img(image_path, target_size=(128, 128))
+        img = image.load_img(image_file, target_size=(128, 128))
         img_array = image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)
         img_array /= 255.0  # Normalize the image
@@ -33,15 +33,11 @@ def main():
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
-        image_path = "temp_image.jpg"
-        with open(image_path, "wb") as f:
-            f.write(uploaded_file.getvalue())
-
         # Display the uploaded image
         st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
         # Make prediction
-        if predict_aadhaar(image_path):
+        if predict_aadhaar(uploaded_file):
             st.success("This is an Aadhaar card!")
         else:
             st.warning("This is not an Aadhaar card.")
