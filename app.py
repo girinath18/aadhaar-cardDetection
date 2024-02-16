@@ -1,14 +1,12 @@
 import streamlit as st
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 from tensorflow.keras.preprocessing import image
 import numpy as np
 
-@st.cache(allow_output_mutation=True)
-def load_model():
-    model_path = r'C:\Users\Dell 5470\OneDrive\Desktop\Aadhaar Detection Using Streamlit\model\Ashes.h5'
-    return load_model(model_path)
+# Load your trained model
+model = load_model('Arrow.h5')
 
-def predict_aadhaar(model, image_path):
+def predict_aadhaar(image_path):
     try:
         # Load and preprocess the image
         img = image.load_img(image_path, target_size=(128, 128))
@@ -31,9 +29,6 @@ def predict_aadhaar(model, image_path):
 def main():
     st.title("Aadhaar Detection App")
 
-    # Load the model
-    model = load_model()
-
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
@@ -45,7 +40,7 @@ def main():
         st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
         # Make prediction
-        if predict_aadhaar(model, image_path):
+        if predict_aadhaar(image_path):
             st.success("This is an Aadhaar card!")
         else:
             st.warning("This is not an Aadhaar card.")
